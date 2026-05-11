@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Combined open questions across both founding documents and the analysis. Surfaces what&#x27;s deliberately unresolved.">
+<title>Open questions — Plataforma</title>
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<aside class="sidebar">
+  <div class="brand">
+    <a href="../index.html"><span class="brand-name">Plataforma</span></a>
+    <span class="brand-status">in development</span>
+  </div>
+  <nav><a href="../index.html" class="">Plataforma</a>
+<a href="../docs/founders-concept-2026-03.html" class="">Founders' concept (Mar 2026)</a>
+<a href="../docs/technical-extension-2026-05.html" class="">Technical extension (May 2026)</a>
+<a href="../docs/art-infrastructure-market.html" class="">The art infrastructure market</a>
+<a href="../docs/artist-buyer-experience.html" class="">Artist & buyer experience</a>
+<a href="../docs/why-complicated.html" class="">Why it's so complicated</a>
+<a href="../docs/signal-and-pinterest.html" class="">Signal, Pinterest, destinations</a>
+<a href="../docs/spotify-analogue.html" class="">The Spotify analogue</a>
+<a href="../docs/shazam-mode.html" class="">Shazam for art</a>
+<a href="../docs/beowolff-connection.html" class="">Technical infrastructure</a>
+<a href="../docs/open-questions.html" class="current">Open questions</a></nav>
+  <footer class="sidebar-footer">
+    <p>K. Dixon &middot; O. Okpokwasili</p>
+    <p>2026</p>
+  </footer>
+</aside>
+<main>
+  <article>
+    <h1 id="open-questions">Open questions</h1>
+<p>Combined unresolved questions across the founders' March 2026 concept, the May 2026 technical extension, and the analysis notes. Some are listed in source-doc Appendix C; others surfaced in subsequent reasoning.</p>
+<h2 id="from-the-founders-march-2026-concept">From the founders' March 2026 concept</h2>
+<p><strong>On approach.</strong> What does "user research with artists and user groups" produce, concretely, that the team uses to refine the model? At what point does scoping freeze?</p>
+<p><strong>On Pods.</strong> What's the smallest viable Pod (number of artists, levels of leadership, type of relationship)? Are pods bounded by medium, by geography, by collaboration history, by curatorial vision?</p>
+<p><strong>On institutional onboarding.</strong> Which NYC institutions sign on first, and on what terms? Do they pay for participation, or is institutional access part of the cooperative deal?</p>
+<p><strong>On fans.</strong> What does fan participation actually look like? "Follow latest from favorite artists" implies push-notification-style updates; how does that interact with the "no algorithmic feed gaming" stance?</p>
+<p><strong>On revenue model.</strong> Membership fees? Institutional subscriptions? Transaction fees on future sales? The March doc says all three are candidates pending user research.</p>
+<h2 id="from-the-may-2026-technical-extension">From the May 2026 technical extension</h2>
+<p><strong>Name.</strong> The project needs a name that signals cooperative ownership and cultural seriousness — something an artist would be proud to list on their CV. <em>Plataforma</em> is provisional.</p>
+<p><strong>Legal structure.</strong> Cooperative, nonprofit, or another form? The choice must make the data-sovereignty commitments credible and enforceable. (NY State has a cooperative corporation form; MA has B-Corp variants; some art platforms have structured as fiscally-sponsored projects under existing nonprofits.)</p>
+<p><strong>Curation.</strong> Is admission open or curated? If curated, by whom? The tension between exclusivity and density needs a governance answer.</p>
+<p><strong>Sustainability.</strong> Membership fees, institutional subscriptions, or transaction fees on future sales? The revenue model must not create incentives that undermine artist ownership.</p>
+<p><strong>Scope.</strong> Visual art first, or multi-discipline from the start? Breadth increases long-term value but diffuses the initial community. (The March doc settles toward multi-discipline implicitly via Okwui's interdisciplinary practice; the May doc reinforces this technically.)</p>
+<h2 id="from-the-analysis">From the analysis</h2>
+<p><strong>Destination problem.</strong> The data-sparsity argument depends on building a "place online to look at art" — a destination people return to without commercial intent. Is that the founders' intent? Or is the directory more passive (queryable when needed but not actively browsed)? The architectural and design implications differ significantly.</p>
+<p><strong>Beowolff relationship.</strong> Three possibilities, named in the <a href="beowolff-connection.md">beowolff-connection note</a>: adopt the technical core, build parallel using the same patterns, or stay separate. The May extension's framing assumed adoption; the founders' March framing didn't address it. Worth surfacing.</p>
+<p><strong>Wolff/Yin context.</strong> If/when Beowolff Capital integrates with Plataforma in any form, the cooperative framing has to be preserved. What does an Artsy/Artnet partnership with a cooperative artist-owned directory look like? It's not impossible — it's a "we provide the closed-catalog data layer in exchange for X" arrangement — but the X has to not undermine the cooperative's core value.</p>
+<p><strong>Pricing transparency.</strong> The directory can be canonical without exposing prices, but Plataforma will face pressure from collectors who want pricing context (and from artists who want to know what their secondary works are bringing). Does Plataforma stay out of pricing entirely, or does it integrate auction archives as a public-resale-history layer? Different answers shape who pays for the platform.</p>
+<p><strong>Authentication.</strong> Per-artist registries, hosted by Plataforma, where the artist (or estate / foundation) signs off on authenticity. Implementable but politically sensitive — touches on existing foundations' gatekeeping role. Is Plataforma trying to be in this layer, or strictly upstream of it?</p>
+<p><strong>Resale royalty.</strong> EU has it (<em>droit de suite</em>), US doesn't. A Plataforma-operated resale royalty system would require either jurisdictional coverage (EU members only?), voluntary participation by buyers and galleries, or some form of escrow / transaction integration. Big policy question.</p>
+<p><strong>Data ingestion ethics.</strong> The artist-CC-set / artist-gallery-web-survey work was framed under Beowolff's "internal-demo posture" — closed-license ingestion is acceptable for a bounded research demo. Plataforma's posture is different: every artist's data is opt-in by definition. Does Plataforma populate artist pages from public sources before the artist signs up (the founders' "directory worth exploring from day one"), or only after? If the former, what's the consent model for those pre-claimed pages?</p>
+<p><strong>Pod-vs-individual onboarding tradeoff.</strong> The Pod model solves cold-start with trust-grounded clusters. But it also creates a barrier to entry: artists outside the existing Pod network need a path in. Does Plataforma offer individual sign-up alongside Pod-based onboarding? At what point does the Pod-only constraint relax?</p>
+<p><strong>International expansion.</strong> NYC-anchored MVP is the right scope start, but Okwui's network is internationally distributed (her work has shown in Tokyo, Berlin, Brazil), and so is much of the contemporary art world. When does the platform open to artists outside the US, and what does that do to legal-structure complexity?</p>
+<h2 id="triage">Triage</h2>
+<p>Of the questions above, the load-bearing decisions for the next 3-6 months are likely:</p>
+<ol><li><strong>Name.</strong> Affects everything downstream (URL, brand, conversation framing).</li><li><strong>Legal structure.</strong> Determines what "artists govern" means concretely.</li><li><strong>Pod constituency.</strong> Who's in the first Pod after Okwui's Sweat Variant team? That seeds the network's character.</li><li><strong>Beowolff relationship.</strong> Adopt the substrate or build parallel. Affects timeline and architecture.</li><li><strong>Destination intent.</strong> Active browsing destination vs. passive directory. Affects product surface design and signal generation.</li></ol>
+<p>The other questions can defer until the core scope is settled.</p>
+  </article>
+</main>
+</body>
+</html>

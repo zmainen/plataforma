@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="How HAAK / Beowolff infrastructure (museum survey, MoMA QID resolver, gallery web adapters, art-analysis API) maps to Plataforma&#x27;s stack. What transfers, what doesn&#x27;t, what&#x27;s speculative.">
+<title>Connection to HAAK / Beowolff infrastructure — Plataforma</title>
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<aside class="sidebar">
+  <div class="brand">
+    <a href="../index.html"><span class="brand-name">Plataforma</span></a>
+    <span class="brand-status">in development</span>
+  </div>
+  <nav><a href="../index.html" class="">Plataforma</a>
+<a href="../docs/founders-concept-2026-03.html" class="">Founders' concept (Mar 2026)</a>
+<a href="../docs/technical-extension-2026-05.html" class="">Technical extension (May 2026)</a>
+<a href="../docs/art-infrastructure-market.html" class="">The art infrastructure market</a>
+<a href="../docs/artist-buyer-experience.html" class="">Artist & buyer experience</a>
+<a href="../docs/why-complicated.html" class="">Why it's so complicated</a>
+<a href="../docs/signal-and-pinterest.html" class="">Signal, Pinterest, destinations</a>
+<a href="../docs/spotify-analogue.html" class="">The Spotify analogue</a>
+<a href="../docs/shazam-mode.html" class="">Shazam for art</a>
+<a href="../docs/beowolff-connection.html" class="current">Technical infrastructure</a>
+<a href="../docs/open-questions.html" class="">Open questions</a></nav>
+  <footer class="sidebar-footer">
+    <p>K. Dixon &middot; O. Okpokwasili</p>
+    <p>2026</p>
+  </footer>
+</aside>
+<main>
+  <article>
+    <h1 id="connection-to-haak-beowolff-infrastructure">Connection to HAAK / Beowolff infrastructure</h1>
+<p>This document maps existing technical work in the HAAK / Beowolff codebase to Plataforma's stack. <strong>Nothing is committed.</strong> The connection is adjacent technical-infrastructure overlap; if Plataforma wants to use any of this, it would be a deliberate adoption decision by the founders, not an inheritance.</p>
+<h2 id="what-s-been-built">What's been built</h2>
+<p>A summary of the relevant infrastructure (all in <a href="../../beowolff/"><code>home/collabs/beowolff/</code></a> and <a href="../../../commons/datasets/"><code>home/commons/datasets/</code></a> in the HAAK repository):</p>
+<table><thead><tr><th>Artifact</th><th>What it does</th><th>Direct relevance to Plataforma</th></tr></thead><tbody><tr><td><strong>Museum survey</strong> (<a href="../../beowolff/reference/museum-survey.md"><code>reference/museum-survey.md</code></a>)</td><td>606 museums catalogued by access mode, license clarity, image quality, metadata richness. Ranked queues for ingest priority — general (<code>ingest-queue.md</code>) and contemporary (<code>ingest-queue-contemporary.md</code>).</td><td>The seed-data sourcing layer. Plataforma's "we found 47 of your works in museum collections" depends on knowing which museums to query. The survey is that map.</td></tr><tr><td><strong>MoMA-Wikidata QID resolver</strong> (<a href="../../../commons/datasets/moma/_resolve_wikidata.py"><code>home/commons/datasets/moma/_resolve_wikidata.py</code></a>)</td><td>Reads MoMA's CC0 catalog from GitHub, batch-queries Wikidata via property <code>P9598</code>, enriches matches with Wikimedia Commons URL + license, writes a join parquet.</td><td>The auto-populate prototype. Same pattern extends to <code>P3219</code> (Met), <code>P650</code> (RKDartists), <code>P245</code> (ULAN), <code>P213</code> (ISNI), <code>P434</code> (MusicBrainz). One resolver, many properties.</td></tr><tr><td><strong>Per-CMS web adapters</strong> (<a href="../../../commons/datasets/_adapters/"><code>home/commons/datasets/_adapters/</code></a>)</td><td>Generic Artlogic + Squarespace adapters. Live-verified against victoria-miro.com — 17 Grayson Perry works extracted from one HTTP fetch.</td><td>Direct path to fetch artist + gallery website data. One Artlogic adapter unlocks ~19 priority galleries + ~100–300 long tail.</td></tr><tr><td><strong>Art-analysis API</strong> (<a href="../../beowolff/intelligence/api.py"><code>home/collabs/beowolff/intelligence/api.py</code></a>)</td><td>FastAPI sidecar serving <code>/analyze</code> (feature axes, neighbors, attention map, Iigaya features), <code>/compare</code>, <code>/thumb/&amp;lt;source&amp;gt;/&amp;lt;index&amp;gt;</code>, <code>/layer_activations</code>.</td><td>The visual-similarity engine. If Plataforma wants embedding-based recommendation, this is the implementation.</td></tr><tr><td><strong><code>analyze.html</code></strong> (<a href="../../beowolff/visualiser/analyze.html"><code>home/collabs/beowolff/visualiser/analyze.html</code></a>)</td><td>6-panel browser surface for technical analysis: feature radar, attention heatmap, neighbor list with thumbnails, match decomposition, Iigaya fingerprint, layer activations.</td><td>Reference UI for the technical-discovery surface. Could be reskinned and embedded in Plataforma's artist-page layout.</td></tr><tr><td><strong>Visualiser</strong> (<a href="../../beowolff/visualiser/"><code>home/collabs/beowolff/visualiser/</code></a>)</td><td>690k-work pan-and-zoom map of the existing corpus, sprite-rendered via WebGL at 60 fps.</td><td>Reference UI for the directory-browsing surface. Maps cleanly to Plataforma's "artist-cluster view" or "movement explorer" use case.</td></tr></tbody></table>
+<h2 id="what-transfers-cleanly">What transfers cleanly</h2>
+<h3 id="the-auto-populate-substrate">The auto-populate substrate</h3>
+<p>The MoMA-Wikidata resolver is exactly the kind of tool the founders' concept names ("the platform automatically searches for your existing identifiers and connects them"). It generalizes to any museum that has a Wikidata external-ID property assigned. A Plataforma adoption would:</p>
+<ol><li>Run the resolver across all major museum source-properties (Met, NGA, Rijksmuseum, AIC, Cleveland, V&amp;A, Smithsonian, etc.)</li><li>Build per-artist join tables: artist → list of museum-attributed works → Wikidata QID → Commons image URL where available</li><li>Surface "we found N of your works in collections" to artists at sign-up</li></ol>
+<p>This is days of work, not weeks, given the resolver pattern is established.</p>
+<h3 id="the-web-adapter-pattern">The web adapter pattern</h3>
+<p>For artists whose work isn't in museum collections (most contemporary artists), the gallery-website + artist-personal-site path covers what museum APIs miss. The Artlogic + Squarespace adapters reach a meaningful fraction of contemporary art's visual presence online.</p>
+<p>Plataforma adoption would: per-artist, attempt to crawl the artist's representing gallery (if Artlogic-hosted) and personal site (if Squarespace-hosted). Yield a candidate work list for the artist's confirmation — same UX the founders' doc names ("we found 47 of your works"), just with a different source.</p>
+<h3 id="the-identity-layer-orcid-for-artists">The identity layer (ORCID-for-artists)</h3>
+<p>The ULAN / ISNI / Wikidata QID / MusicBrainz reconciliation pattern is what the technical extension doc spells out. Already implemented for Wikidata (in the resolver); the others are the same code shape with a different external-ID property. ~2-3 days per identifier.</p>
+<h2 id="what-doesn-t-transfer">What doesn't transfer</h2>
+<h3 id="the-bot-ux-layer">The bot UX layer</h3>
+<p>The Beowolff Telegram bot is <em>not</em> the Plataforma surface. It's a demonstration vehicle for visual similarity, designed for one-image-at-a-time analysis on mobile. Plataforma's surface is a directory — multi-artist, multi-work, browsable, persistent. Different product entirely.</p>
+<p>If Plataforma adopts Beowolff's engine, it adopts the FastAPI sidecar (the engine) and re-skins the front-end (the directory + artist pages) from scratch. The bot retires or stays as a side product.</p>
+<h3 id="the-pitch-context">The pitch context</h3>
+<p>The Beowolff pitch to Andrew Wolff / Jeffrey Yin (per <a href="../../beowolff/pitch/job.md"><code>home/collabs/beowolff/pitch/job.md</code></a>) frames Beowolff as an integration into Artsy/Artnet's existing inventory. <strong>This framing is incompatible with Plataforma's cooperative-alternative framing.</strong> A team building Plataforma can't simultaneously pitch its core technology as the recommendation layer for the commercial discovery incumbent — at least not without careful sequencing.</p>
+<p>The honest answer is probably: the same technical core can serve both, but the <em>story</em> is different per audience. Beowolff Capital sees "embedding-grade recommendation for the merged Artsy/Artnet catalog." Plataforma members see "embedding-grade recommendation built on infrastructure artists own." Both are true; they're separate products with shared substrate.</p>
+<h3 id="the-closed-license-negotiated-access-problem">The closed-license / negotiated-access problem</h3>
+<p>Beowolff's "internal-demo posture" deals with the closed-license problem by ingesting closed-license sources (MoMA-direct, Tate-direct, Whitney-direct, etc.) under research-use framing. <strong>Plataforma can't do this</strong> because Plataforma is built around artist data sovereignty — ingesting closed-license artist work into a member-facing directory recreates the extraction it claims to reject.</p>
+<p>Plataforma's path on closed-license is different: the artist who joins explicitly grants the license. The platform doesn't scrape; it asks. The MoMA-direct / Tate-direct ingest path is for Beowolff's separate use case, not for Plataforma.</p>
+<h2 id="what-s-speculative">What's speculative</h2>
+<h3 id="whether-the-visualiser-pattern-fits">Whether the visualiser pattern fits</h3>
+<p>The 690k-work pan-and-zoom map is gorgeous as a Beowolff demo but might be the wrong UX for Plataforma. Plataforma's organizing entity is <strong>the artist</strong>, not the work. The right primary view is probably an artist page (with their full catalog), with relationships to other artists rendered as a network — closer to Discogs's artist page than to Pinterest's infinite scroll.</p>
+<p>The visualiser could appear as a "show me the field of art" affordance — a way to see the embedding space — but it's secondary to the artist directory.</p>
+<h3 id="whether-the-wolff-pitch-is-leverage-or-constraint">Whether the Wolff pitch is leverage or constraint</h3>
+<p>If Beowolff Capital (Andrew Wolff + Jeffrey Yin's merged Artsy/Artnet entity) becomes a Plataforma backer or partner, the technical work has compounding value. If the relationship stays purely commercial (Beowolff as a discrete recommendation product, Plataforma as a separate cooperative), the technical work is parallel but politically separate.</p>
+<p>The right answer probably depends on whether Wolff/Yin would back a cooperative directory project that explicitly positions itself as upstream of the commercial discovery layer. That's a conversation, not a technical question.</p>
+<h3 id="whether-plataforma-is-the-right-name">Whether "Plataforma" is the right name</h3>
+<p>The May extension flagged this in Appendix C. The March doc uses "Plataforma" as a working name; the project will need a final name that "an artist would be proud to list on their CV." A few candidate axes:</p>
+<ul><li>Latin / cultural seriousness (e.g. "Plataforma," "Atelier," "Codex")</li><li>ORCID-style technical naming (acronym: AIC, AVCN, etc.)</li><li>Aspirational / mission-evoking (e.g. "Common Catalog," "Open Atlas")</li></ul>
+<p>The name decision affects URL choice and brand identity downstream. Worth converging early.</p>
+<h2 id="summary-mapping">Summary mapping</h2>
+<p>If Plataforma adopts everything HAAK has built:</p>
+<pre><code>Plataforma layer            Existing HAAK / Beowolff piece
+──────────────────────────  ──────────────────────────────
+Auto-populate from museums  MoMA-Wikidata resolver, generalized
+Auto-populate from web      Artlogic + Squarespace adapters
+Identity reconciliation     Resolver pattern × ULAN/ISNI/MusicBrainz
+Visual recommendation       FastAPI analyze sidecar
+Artist page UI              new (re-skin from analyze.html?)
+Directory browse UI         new (re-skin from visualiser?)
+Pod / cooperative governance new (Plataforma-specific)
+Resale royalty tracking     new (Beowolff Shapley pipeline as substrate?)
+Commerce / Bandcamp-style   new</code></pre>
+<p>The technical infrastructure is meaningful but not the project. <strong>The cooperative governance structure, the Pod-based onboarding, the artist-owned data architecture, the political theory of the case — those are Plataforma's actual product.</strong> The HAAK code is substrate; the founders' concept is product.</p>
+  </article>
+</main>
+</body>
+</html>
