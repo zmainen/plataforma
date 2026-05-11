@@ -145,9 +145,14 @@ body {
 
 .features {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 2.5rem;
   margin-top: 2.5rem;
+}
+
+/* Force pillars to 3 columns on wide screens */
+.pillars {
+  grid-template-columns: repeat(3, 1fr);
 }
 
 .feature {
@@ -563,16 +568,17 @@ body {
    Responsive
    ======================================== */
 
-@media (max-width: 900px) {
-  .hero {
-    padding: 4rem 2rem 3.5rem;
-    min-height: 85vh;
-  }
+/* Tablet */
+@media (max-width: 960px) {
+  .hero { padding: 5rem 2.5rem 3rem; }
+  .section { padding: 4rem 2.5rem; }
 
-  .section { padding: 4rem 2rem; }
+  .pillars { grid-template-columns: 1fr; gap: 1.5rem; }
+  .pillars .feature { padding-top: 1.5rem; }
 
-  .art-strip { grid-template-columns: 1fr; }
-  .art-strip img { height: 220px; }
+  .art-mosaic { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
+
+  .team-grid { gap: 2rem; }
 
   .page-doc { grid-template-columns: 1fr; }
   .doc-sidebar {
@@ -583,11 +589,12 @@ body {
     padding: 1.5rem;
   }
   .doc-sidebar nav {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    flex-direction: row;
+    flex-wrap: wrap;
     gap: 0;
   }
-  .doc-main { padding: 2.5rem 1.5rem 4rem; }
+  .doc-sidebar nav a { border-left: 0; margin-left: 0; padding: 0.4rem 1rem; }
+  .doc-main { padding: 2.5rem 2rem 4rem; }
   .doc-main article h1 { font-size: 1.8rem; }
 
   .site-footer {
@@ -598,11 +605,20 @@ body {
   }
 }
 
+/* Mobile */
 @media (max-width: 560px) {
   html { font-size: 16px; }
+  .hero { padding: 4rem 1.5rem 2.5rem; }
   .hero h1 { font-size: 2.8rem; }
-  .features { grid-template-columns: 1fr; }
+  .section { padding: 3rem 1.5rem; }
+
+  .art-mosaic { grid-template-columns: repeat(3, 1fr); gap: 2px; }
+
+  .features { grid-template-columns: 1fr; gap: 1.5rem; }
+  .pillars { grid-template-columns: 1fr; }
   .principles { grid-template-columns: 1fr; }
   .doc-grid { grid-template-columns: 1fr; }
-  .team-grid { grid-template-columns: 1fr; }
+  .team-grid { grid-template-columns: 1fr; gap: 2rem; }
+
+  .doc-main { padding: 2rem 1.2rem 3rem; }
 }
