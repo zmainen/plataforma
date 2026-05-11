@@ -3,71 +3,183 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="A cooperative network for discovering and cataloging creative work.">
+<meta name="description" content="A cooperative network for discovering and cataloging creative work — built with and for artists.">
 <title>Plataforma</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<aside class="sidebar">
-  <div class="brand">
-    <a href="index.html"><span class="brand-name">Plataforma</span></a>
-    <span class="brand-status">in development</span>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-bg" style="background-image:url(img/hero-vangogh-wheatfield.jpg)"></div>
+  <div class="hero-content">
+    <h1>Plataforma</h1>
+    <p class="tagline">A cooperative network for discovering and cataloging creative work — built with and for artists.</p>
+    <span class="scroll-hint">&darr; Scroll</span>
   </div>
-  <nav><a href="index.html" class="current">Overview</a>
-<a href="docs/founders-concept-2026-03.html" class="">Founders' concept (Mar 2026)</a>
-<a href="docs/technical-extension-2026-05.html" class="">Technical extension (May 2026)</a>
-<a href="docs/art-infrastructure-market.html" class="">The art infrastructure market</a>
-<a href="docs/artist-buyer-experience.html" class="">Artist & buyer experience</a>
-<a href="docs/why-complicated.html" class="">Why it's so complicated</a>
-<a href="docs/signal-and-pinterest.html" class="">Signal, Pinterest, destinations</a>
-<a href="docs/spotify-analogue.html" class="">The Spotify analogue</a>
-<a href="docs/shazam-mode.html" class="">Shazam for art</a>
-<a href="docs/beowolff-connection.html" class="">Technical infrastructure</a>
-<a href="docs/open-questions.html" class="">Open questions</a></nav>
-  <footer class="sidebar-footer">
-    <p>K. Dixon &middot; O. Okpokwasili</p>
-    <p>2026</p>
-  </footer>
-</aside>
-<main>
-  <article>
-    <h1 id="plataforma">Plataforma</h1>
-<p>A cooperative network for discovering and cataloging creative work — built with and for artists.</p>
-<hr>
-<h2 id="the-problem">The problem</h2>
-<p>Artists are hard to find. A personal portfolio site is discoverable only if someone already knows the artist's name. Gallery websites showcase their own roster but not the wider landscape. Existing platforms are marketplaces first — discovery is a byproduct of selling, not a goal in itself. There is no place where a curator, collector, researcher, or fellow artist can explore creative work across a community the way one might browse a great library or walk through a well-curated fair.</p>
-<p>Meanwhile, the infrastructure that does exist is under pressure. The pandemic made clear how precarious support for artists is, and the situation in 2026 is no better: AI threatens ownership, public grants are being divested, and social media demands that artists "game" algorithms in the hope of finding financial benefactors — a losing proposition for most.</p>
-<p>Artists, though famously under-organized, are increasingly aware of the need to create solutions for themselves.</p>
-<h2 id="the-vision">The vision</h2>
-<p>Plataforma is a cooperative directory where artists are discoverable — by curators, collectors, other artists, and the public — within a space that has the editorial seriousness of a good institution and the reach of the open web. Not a marketplace. Not a social network. A structured, searchable, browsable map of creative production across disciplines, built and governed by the artists themselves.</p>
-<p>Each artist maintains a catalog of their work. But cataloging is just the mechanism — the point is what happens when catalogs are connected. A visitor can arrive looking for one artist and discover ten more through shared exhibitions, institutions, movements, or media. The platform makes the relationships between artists, works, and institutions visible and navigable in a way that no individual portfolio site or gallery roster can.</p>
-<h2 id="how-it-works">How it works</h2>
-<p><strong>The platform does the cataloging work for you.</strong> When you join, Plataforma searches the collections of major museums, Wikidata, and other public databases for works already attributed to you, and presents them for your review. You confirm, correct, or add to what it finds. The experience is <em>"we found 47 of your works in museum collections — confirm?"</em> rather than <em>"please enter your first artwork."</em></p>
-<p>This is possible because museums have been digitizing their collections for decades. The Metropolitan Museum has 480,000 records with open metadata. The Smithsonian has 11 million. The Rijksmuseum, 700,000. Plataforma draws from <a href="docs/technical-extension-2026-05.html">twelve major open-access collections</a> and growing.</p>
-<p><strong>Your images come from you.</strong> Museum open-access programs overwhelmingly cover metadata — titles, dates, exhibition histories, collection placements — but restrict images of contemporary work behind copyright. The record that your sculpture was acquired by MoMA in 2019 is public data; the photograph of the sculpture usually is not. This means your career history can be auto-populated from public sources, but the visual representation of your work is something only you can provide. That's by design: your images, your control.</p>
-<p><strong>Identity across systems.</strong> Scientists have ORCID — a universal identifier that follows them across institutions. Artists have nothing comparable. Plataforma links your profile to every existing identifier (Wikidata, Getty ULAN, ISNI, MusicBrainz) and gives you a persistent, portable URI. Long term, we aim to become an identity standard for creative professionals — <a href="docs/technical-extension-2026-05.html#identity">an ORCID for artists</a>.</p>
-<p><strong>Not just visual art.</strong> The catalog handles creative work in any discipline. A painting has dimensions; a composition has duration and performers; a film has runtime, cast, and screenings. The platform draws from museum collections, MusicBrainz, film databases, and Wikidata. An artist working across media — or a musician, filmmaker, or architect — can maintain a <a href="docs/technical-extension-2026-05.html#not-just-visual-art">single catalog of their entire body of work</a>.</p>
-<h2 id="what-s-different">What's different</h2>
-<p><strong>You own your data.</strong> The platform is a custodian, not an owner. You grant a revocable license to display and index your work. If you leave, your data is deleted — not archived, not retained. You can export everything, anytime, in open formats.</p>
-<p><strong>No training without consent.</strong> If the platform ever builds recommendation tools or intelligence from artist data, you opt in explicitly. Consent is granular and revocable.</p>
-<p><strong>Artists govern the platform.</strong> Plataforma is a cooperative. The people whose work constitutes the platform make the rules. Policies are set by members, not investors.</p>
-<p><strong>If value is created, it flows to you.</strong> If the platform generates revenue from your data — through recommendations, licensing, or future sales features — compensation is tracked and distributed to contributors, not captured by the platform.</p>
-<p>These are not terms-of-service promises. They are structural commitments, designed into the architecture and enforced by cooperative governance. For the reasoning behind each commitment, see <a href="docs/founders-concept-2026-03.html">the founders' concept</a>.</p>
-<h2 id="the-approach">The approach</h2>
-<p>Plataforma grows through Pods — cohorts of artists who join as a group with one or two leaders who are early adopters. Pods are built around existing connections between artists and their interest in sharing those collaborations publicly, alongside the archive of their work.</p>
-<p>Starting with New York City artists and institutions for the initial build phase, then expanding along the international networks of participating NYC artists. The first pods will be drawn from the founders' personal networks, starting with Okwui Okpokwasili and the Sweat Variant team.</p>
-<h2 id="the-team">The team</h2>
-<p><strong>Katie Dixon</strong> — experienced leader, builder and administrator with over two decades at the intersection of arts, architecture, and urban planning. She has created cross-sector partnerships and new artist-led programming for a broad range of arts, culture and civic organizations. Leadership roles at Socrates Sculpture Park, Powerhouse Arts, BAM, and NYC Department of Cultural Affairs. BA Yale, MA Columbia.</p>
-<p><strong>Okwui Okpokwasili</strong> — performer, choreographer and writer creating multi-disciplinary performance pieces. Her productions include Bessie Award-winning <em>pent-up: a revenge dance</em> and <em>Bronx Gothic</em>. Recipient of a 2018 MacArthur Fellowship. BA Yale.</p>
-<p><strong>Zach Mainen</strong> — neuroscientist and technologist. Principal investigator, Champalimaud Foundation (Lisbon). Builder of open-source infrastructure for museum data pipelines, identifier resolution, and computational art analysis. Technical contributor.</p>
-<h2 id="further-reading">Further reading</h2>
-<h3 id="foundational-documents">Foundational documents</h3>
-<ul><li><a href="docs/founders-concept-2026-03.html">Founders' concept (March 2026)</a> — The originating document. Cooperative network framing, Pod-based onboarding, NYC pilot, economic urgency.</li><li><a href="docs/technical-extension-2026-05.html">Technical extension (May 2026)</a> — Data architecture. Auto-populate from museum collections, identifier reconciliation, multi-disciplinary catalog.</li></ul>
-<h3 id="market-and-strategy-analysis">Market and strategy analysis</h3>
-<ul><li><a href="docs/art-infrastructure-market.html">The art infrastructure market</a> — Six-layer market stack. Where money flows, where the structural openings are.</li><li><a href="docs/artist-buyer-experience.html">Artist and buyer experience</a> — How the existing infrastructure feels to the working artist and the potential buyer.</li><li><a href="docs/why-complicated.html">Why it's so complicated</a> — Six structural reasons the art infrastructure is the way it is.</li><li><a href="docs/signal-and-pinterest.html">Signal, Pinterest, and destinations</a> — The data sparsity problem and where discovery signal could come from.</li><li><a href="docs/spotify-analogue.html">The Spotify analogue</a> — Where Spotify is a useful analogue and where it's a trap.</li><li><a href="docs/shazam-mode.html">Shazam for art</a> — Image identification as a discovery wedge.</li><li><a href="docs/beowolff-connection.html">Technical infrastructure</a> — Existing open-source infrastructure that could serve the platform.</li></ul>
-<h3 id="open-questions">Open questions</h3>
-<ul><li><a href="docs/open-questions.html">Open questions</a> — Unresolved questions across all documents.</li></ul>
-  </article>
-</main>
+</section>
+
+<!-- Problem -->
+<section class="section">
+  <div class="section-inner">
+    <h2>Artists are invisible online</h2>
+    <p class="lead">A personal portfolio site is discoverable only if someone already knows your name. Galleries showcase their own roster. Existing platforms are marketplaces first — discovery is a byproduct of selling, not a goal.</p>
+    <p>Meanwhile, AI threatens ownership, public grants are being divested, and social media demands that artists game algorithms in the hope of finding financial benefactors. The information that would make discovery possible — structured records of who made what, where it has been shown, which collections hold it — exists but is scattered across museum databases, gallery spreadsheets, and CV PDFs.</p>
+  </div>
+</section>
+
+<!-- Art strip -->
+<div class="art-strip"><img src="img/accent-1-gauguin.jpg" alt="" loading="lazy"><img src="img/accent-2-vangogh-sunflowers.jpg" alt="" loading="lazy"><img src="img/accent-3-persian-birds.jpg" alt="" loading="lazy"></div>
+
+<!-- How it works -->
+<section class="section section-dark">
+  <div class="section-inner">
+    <h2>How it works</h2>
+    <div class="features">
+      <div class="feature">
+        <div class="feature-number">01</div>
+        <h3>We find your work for you</h3>
+        <p>When you join, Plataforma searches the collections of major museums, Wikidata, and public databases for works already attributed to you. The experience is "we found 47 of your works in museum collections — confirm?" not "please enter your first artwork."</p>
+      </div>
+      <div class="feature">
+        <div class="feature-number">02</div>
+        <h3>Your images, your control</h3>
+        <p>Museums release metadata but restrict images of contemporary work. Your career history auto-populates from public sources, but the visual representation of your work comes from you — because only you should control it.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-number">03</div>
+        <h3>An ORCID for artists</h3>
+        <p>Scientists have ORCID. Artists have nothing comparable. Plataforma links your profile to every existing identifier — Wikidata, Getty ULAN, ISNI, MusicBrainz — and gives you one persistent, portable URI across all systems.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-number">04</div>
+        <h3>Every discipline</h3>
+        <p>Not just visual art. A painting has dimensions; a composition has duration; a film has cast. The catalog handles creative work across media — one artist, one catalog, every discipline.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- What's different -->
+<section class="section section-deep">
+  <div class="section-inner">
+    <h2>What's different</h2>
+    <div class="principles">
+      <div class="principle">
+        <h3>You own your data</h3>
+        <p>Revocable license. Full export anytime. If you leave, your data is deleted — not archived.</p>
+      </div>
+      <div class="principle">
+        <h3>No training without consent</h3>
+        <p>Any intelligence built from artist data requires explicit, granular, revocable opt-in.</p>
+      </div>
+      <div class="principle">
+        <h3>Artists govern</h3>
+        <p>Plataforma is a cooperative. Members set the policies, not investors.</p>
+      </div>
+      <div class="principle">
+        <h3>Value flows to you</h3>
+        <p>Revenue from your data — recommendations, licensing, sales — is tracked and distributed to contributors.</p>
+      </div>
+    </div>
+    <p style="margin-top:2.5rem;color:rgba(255,255,255,0.5);font-size:0.9rem;">These are structural commitments, not terms-of-service promises. <a href="docs/founders-concept-2026-03.html" style="color:#b8a0ff;">Read the founders' concept &rarr;</a></p>
+  </div>
+</section>
+
+<!-- Approach -->
+<section class="section section-cream">
+  <div class="section-inner">
+    <h2>Growing through Pods</h2>
+    <p class="lead">Artists join Plataforma as a group — cohorts built around existing connections, with one or two early-adopter leaders. Starting in New York City, expanding along the international networks of participating artists.</p>
+    <p>The first pods will be drawn from the founders' personal networks, starting with Okwui Okpokwasili and the Sweat Variant team. Institutions, galleries, and fans follow the artists in.</p>
+  </div>
+</section>
+
+<!-- Team -->
+<section class="section">
+  <div class="section-inner">
+    <h2>The team</h2>
+    <div class="team-grid">
+      <div class="team-member">
+        <h3>Katie Dixon</h3>
+        <span class="role">Co-founder</span>
+        <p>Two decades at the intersection of arts, architecture, and urban planning. Created cross-sector partnerships and artist-led programming at Socrates Sculpture Park, Powerhouse Arts, BAM, and NYC Department of Cultural Affairs. BA Yale, MA Columbia.</p>
+      </div>
+      <div class="team-member">
+        <h3>Okwui Okpokwasili</h3>
+        <span class="role">Co-founder</span>
+        <p>Performer, choreographer, writer. Multi-disciplinary productions include Bessie Award-winning <em>Bronx Gothic</em> and <em>pent-up: a revenge dance</em>. 2018 MacArthur Fellow. BA Yale.</p>
+      </div>
+      <div class="team-member">
+        <h3>Zach Mainen</h3>
+        <span class="role">Technical contributor</span>
+        <p>Neuroscientist and technologist. Principal investigator, Champalimaud Foundation (Lisbon). Builder of open-source infrastructure for museum data, identifier resolution, and computational art analysis.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Documents -->
+<section class="section section-cream">
+  <div class="section-inner">
+    <h2>Read more</h2>
+    <span class="doc-section-label">Foundational</span>
+    <div class="doc-grid">
+      <a class="doc-card" href="docs/founders-concept-2026-03.html">
+        <h3>Founders' concept</h3>
+        <p>The originating document. Cooperative framing, Pod-based onboarding, NYC pilot, economic urgency. March 2026.</p>
+      </a>
+      <a class="doc-card" href="docs/technical-extension-2026-05.html">
+        <h3>Technical extension</h3>
+        <p>Data architecture. Auto-populate from museum collections, identifier reconciliation, multi-disciplinary catalog. May 2026.</p>
+      </a>
+    </div>
+    <span class="doc-section-label">Market &amp; strategy</span>
+    <div class="doc-grid">
+      <a class="doc-card" href="docs/art-infrastructure-market.html">
+        <h3>Art infrastructure market</h3>
+        <p>Six-layer market stack. Where money flows, where the openings are.</p>
+      </a>
+      <a class="doc-card" href="docs/artist-buyer-experience.html">
+        <h3>Artist &amp; buyer experience</h3>
+        <p>How the existing infrastructure feels to artists and buyers.</p>
+      </a>
+      <a class="doc-card" href="docs/why-complicated.html">
+        <h3>Why it's complicated</h3>
+        <p>Six structural reasons the art infrastructure is the way it is.</p>
+      </a>
+      <a class="doc-card" href="docs/signal-and-pinterest.html">
+        <h3>Signal &amp; discovery</h3>
+        <p>Data sparsity problem. Where discovery signal could come from.</p>
+      </a>
+      <a class="doc-card" href="docs/spotify-analogue.html">
+        <h3>The Spotify analogue</h3>
+        <p>Where Spotify is useful and where it's a trap.</p>
+      </a>
+      <a class="doc-card" href="docs/shazam-mode.html">
+        <h3>Shazam for art</h3>
+        <p>Image identification as a discovery wedge.</p>
+      </a>
+      <a class="doc-card" href="docs/beowolff-connection.html">
+        <h3>Technical infrastructure</h3>
+        <p>Existing open-source infrastructure that could serve the platform.</p>
+      </a>
+    </div>
+    <span class="doc-section-label">Open questions</span>
+    <div class="doc-grid">
+      <a class="doc-card" href="docs/open-questions.html">
+        <h3>Open questions</h3>
+        <p>Unresolved questions across all documents.</p>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="site-footer">
+  <span>Plataforma &middot; 2026</span>
+  <span>K. Dixon &middot; O. Okpokwasili &middot; Z. Mainen</span>
+</footer>
+
 </body>
 </html>
