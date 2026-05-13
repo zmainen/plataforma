@@ -122,6 +122,55 @@ body {
 
 .declarations p:last-child { margin-bottom: 0; }
 
+/* === Briefs grid === */
+
+.briefs {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 2rem 4rem;
+}
+
+.briefs h2 {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #2B5EA7;
+  margin-bottom: 1.5rem;
+}
+
+.brief-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 0;
+}
+
+.brief-card {
+  padding: 1.5rem;
+  text-decoration: none;
+  color: inherit;
+  transition: background 0.15s;
+  border: 1px solid #e8e8e8;
+  margin-top: -1px;
+  margin-left: -1px;
+}
+
+.brief-card:hover { background: #f8f9fb; }
+
+.brief-card h3 {
+  font-size: 0.95rem;
+  font-weight: 500;
+  margin-bottom: 0.4rem;
+  color: #1a1a1a;
+}
+
+.brief-card p {
+  font-size: 0.82rem;
+  font-weight: 400;
+  line-height: 1.55;
+  color: #888;
+}
+
 /* === Rule === */
 
 .rule {
@@ -223,7 +272,7 @@ footer .footer-inner {
   max-width: 900px;
   margin: 0 auto;
   display: grid;
-  grid-template-columns: 2fr 1fr 1fr;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
   gap: 3rem;
 }
 
@@ -294,6 +343,18 @@ footer .footer-bottom {
 
 .doc-sidebar nav a:hover { color: #1a1a1a; }
 .doc-sidebar nav a.current { color: #1a1a1a; font-weight: 500; }
+
+.doc-sidebar nav .nav-section {
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #bbb;
+  margin-top: 1.2rem;
+  padding-bottom: 0.2rem;
+}
+
+.doc-sidebar nav .nav-section:first-child { margin-top: 0; }
 
 .doc-main { padding: 4rem 4rem 6rem; max-width: 100%; overflow-x: auto; }
 .doc-main article { max-width: 650px; }
