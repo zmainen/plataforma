@@ -105,6 +105,19 @@ main { padding: 34px 0 70px; min-height: 60vh; }
 .status-tag.rejected { background: var(--danger-soft); color: var(--danger); }
 .status-tag.merged { background: var(--surface-2); color: var(--muted); }
 
+/* Source links + expandable details */
+.pill.src-link { color: var(--accent); border-color: color-mix(in srgb, var(--accent) 35%, var(--line)); text-decoration: none; }
+.pill.src-link:hover { background: var(--accent); color: var(--accent-ink); text-decoration: none; }
+.details-toggle { background: none; border: 0; color: var(--accent); font: inherit; font-size: 13px; padding: 0 18px 14px; }
+.details-toggle:hover { text-decoration: underline; }
+.wcard-actions + .details-toggle { padding-top: 0; }
+.wdetails { margin: 0 18px 16px; padding: 12px 14px; background: var(--surface-2); border-radius: 8px; font-size: 13px; color: var(--muted); }
+.wdetails .d-row { display: flex; gap: 12px; margin: 5px 0; align-items: baseline; }
+.wdetails .d-k { flex: 0 0 118px; color: var(--faint); font-weight: 600; }
+.wdetails .d-list { margin: 0; padding-left: 16px; }
+.wdetails .d-list li { margin: 2px 0; }
+@media (max-width: 560px) { .wdetails .d-row { flex-direction: column; gap: 2px; } .wdetails .d-k { flex-basis: auto; } }
+
 .issue-note { display: flex; gap: 10px; align-items: flex-start; background: var(--warn-soft); border-top: 1px solid color-mix(in srgb, var(--warn) 25%, transparent); padding: 11px 18px; font-size: 13px; color: var(--ink); }
 .issue-note .ico { color: var(--warn); font-weight: 700; }
 

@@ -57,6 +57,46 @@
     var perf = (c.modules || []).indexOf("performance") >= 0;
     return { cls: perf ? "perf" : "", ch: perf ? "◭" : (c.title ? c.title[0] : "◻") };
   }
+  // A source pill links out to its real record when the source carries a URL.
+  function sourcePill(sid) {
+    var s = SEED.sources.find(function (x) { return x.id === sid; });
+    var label = s ? s.label : sid;
+    if (s && s.url) {
+      return '<a class="pill src-link" href="' + esc(s.url) + '" target="_blank" rel="noopener">' + esc(label) + ' ↗</a>';
+    }
+    return '<span class="pill">' + esc(label) + '</span>';
+  }
+  // Expandable detail built only from fields that actually exist on the record.
+  function detailsHtml(c) {
+    var rows = [];
+    if (c.duration) rows.push('<div class="d-row"><span class="d-k">Duration</span><span>' + esc(c.duration) + '</span></div>');
+    if (c.collection && c.collection.holder) rows.push('<div class="d-row"><span class="d-k">Collection</span><span>' + esc(c.collection.holder) + '</span></div>');
+    if (c.realisations && c.realisations.length) {
+      var rs = c.realisations.map(function (r) {
+        var v = (r.venues && r.venues.length) ? ' — ' + esc(r.venues.join(", ")) : "";
+        return '<li>' + esc(r.type) + ': <b>' + esc(r.title) + '</b>' + (r.dateRange ? ' · ' + esc(r.dateRange) : "") + v + '</li>';
+      }).join("");
+      rows.push('<div class="d-row"><span class="d-k">Realisations</span><ul class="d-list">' + rs + '</ul></div>');
+    }
+    if (c.commissioners && c.commissioners.length) rows.push('<div class="d-row"><span class="d-k">Commissioned by</span><span>' + esc(c.commissioners.join(", ")) + '</span></div>');
+    if (c.funders && c.funders.length) rows.push('<div class="d-row"><span class="d-k">Funders</span><span>' + esc(c.funders.join(", ")) + '</span></div>');
+    return rows.join("");
+  }
+  function attachDetails(cardNode, c) {
+    var body = detailsHtml(c);
+    if (!body) return;
+    var toggle = el('<button class="details-toggle" aria-expanded="false">▸ More details</button>');
+    var panel = el('<div class="wdetails" hidden>' + body + '</div>');
+    toggle.addEventListener("click", function () {
+      if (panel.hasAttribute("hidden")) {
+        panel.removeAttribute("hidden"); toggle.textContent = "▾ Fewer details"; toggle.setAttribute("aria-expanded", "true");
+      } else {
+        panel.setAttribute("hidden", ""); toggle.textContent = "▸ More details"; toggle.setAttribute("aria-expanded", "false");
+      }
+    });
+    cardNode.appendChild(toggle);
+    cardNode.appendChild(panel);
+  }
 
   /* ------------------------------------------------------------------ steps */
   var STEPS = [
@@ -184,8 +224,8 @@
   }
   function previewCard(c) {
     var g = glyphFor(c);
-    var srcs = (c.sources || []).map(function (s) { return '<span class="pill">' + esc(sourceLabel(s)) + '</span>'; }).join("");
-    return el(
+    var srcs = (c.sources || []).map(sourcePill).join("");
+    var node = el(
       '<div class="wcard"><div class="wcard-main">' +
         '<div class="glyph ' + g.cls + '">' + esc(g.ch) + '</div>' +
         '<div class="info"><div class="wtitle">' + esc(c.title) + '</div>' +
@@ -195,6 +235,8 @@
           '</div>' +
         '</div>' +
       '</div></div>');
+    attachDetails(node, c);
+    return node;
   }
 
   /* ============================================================= VIEW: review */
@@ -227,7 +269,7 @@
     var g = glyphFor(c);
     var wrap = el('<div class="wcard' + (st ? " resolved" : "") + (c.issue && !st ? " flag-issue" : "") + '"></div>');
 
-    var srcs = (c.sources || []).map(function (s) { return '<span class="pill">' + esc(sourceLabel(s)) + '</span>'; }).join("");
+    var srcs = (c.sources || []).map(sourcePill).join("");
     var statusTag = st ? '<span class="status-tag ' + st + '">' + st + "</span>" : "";
     var main = el(
       '<div class="wcard-main">' +
@@ -277,6 +319,7 @@
       }
     }
     wrap.appendChild(actions);
+    attachDetails(wrap, c);
     return wrap;
   }
 

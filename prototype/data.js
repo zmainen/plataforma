@@ -36,9 +36,9 @@ window.PLATAFORMA_SEED = {
   },
 
   sources: [
-    { id: "website",     label: "sweatvariant.com",        kind: "Artist website",           via: "Squarespace adapter" },
-    { id: "wikidata",    label: "Wikidata (Q22079195)",    kind: "Open structured data",     via: "SPARQL" },
-    { id: "collections", label: "Museum collections",      kind: "Whitney · Hammer",         via: "Collection APIs" },
+    { id: "website",     label: "sweatvariant.com",        kind: "Artist website",           via: "Squarespace adapter", url: "https://www.sweatvariant.com" },
+    { id: "wikidata",    label: "Wikidata (Q22079195)",    kind: "Open structured data",     via: "SPARQL",              url: "https://www.wikidata.org/wiki/Q22079195" },
+    { id: "collections", label: "Museum collections",      kind: "Whitney · Hammer",         via: "Collection APIs",     url: "https://whitney.org/collection/works/64864" },
     { id: "press",       label: "Press & exhibitions",     kind: "Reviews, catalogues",      via: "Web search" }
   ],
 
