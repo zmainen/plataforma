@@ -116,6 +116,15 @@ main { padding: 34px 0 70px; min-height: 60vh; }
 .pw-glyph.has-img { padding: 0; overflow: hidden; }
 .pw-glyph.has-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .pw-cred { font-size: 11px; color: var(--faint); margin-top: 5px; }
+
+/* Point-at-a-missed-site (scan) */
+.scan-box { margin: 22px 0 4px; padding: 16px 18px; border: 1px dashed color-mix(in srgb, var(--seed) 45%, var(--line)); border-radius: var(--radius); background: var(--seed-soft); }
+.scan-label { font-size: 13.5px; color: var(--ink); margin-bottom: 10px; }
+.scan-row { display: flex; gap: 8px; flex-wrap: wrap; }
+.scan-input { flex: 1 1 260px; font: inherit; font-size: 14px; padding: 9px 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); color: var(--ink); }
+.scan-input:disabled { opacity: .6; }
+.scan-status { font-size: 12.5px; color: var(--muted); margin-top: 9px; display: flex; align-items: center; gap: 7px; min-height: 16px; }
+.scan-demo { color: var(--faint); }
 .details-toggle { background: none; border: 0; color: var(--accent); font: inherit; font-size: 13px; padding: 0 18px 14px; }
 .details-toggle:hover { text-decoration: underline; }
 .wcard-actions + .details-toggle { padding-top: 0; }

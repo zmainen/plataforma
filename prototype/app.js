@@ -142,18 +142,69 @@
     var parts = h.split("/");
     return { name: parts[0] || "", arg: parts[1] || "" };
   }
+  var _lastView = null;
   function render() {
     var r = currentRoute();
     var main = document.getElementById("view");
     var header = document.getElementById("steps-slot");
     var fn = { "": viewClaim, "discover": viewDiscover, "review": viewReview,
                "catalogue": viewCatalogue, "pod": viewPod, "public": viewPublic }[r.name] || viewClaim;
+    // Preserve scroll on in-place re-renders (confirm/edit/toggle); only jump to
+    // top when actually navigating to a different view.
+    var keepY = (r.name === _lastView) ? window.scrollY : 0;
     header.innerHTML = renderSteps(r.name);
     main.innerHTML = "";
     main.appendChild(fn(r.arg));
-    window.scrollTo(0, 0);
+    window.scrollTo(0, keepY);
+    _lastView = r.name;
   }
   window.addEventListener("hashchange", render);
+
+  /* ------------------------------------------- point-at-a-missed-site (scan) */
+  function deriveDomain(url) {
+    return String(url).trim().replace(/^https?:\/\//i, "").replace(/^www\./i, "")
+      .replace(/[?#].*$/, "").replace(/\/.*$/, "");
+  }
+  function scanPill(c) {
+    if (!c.scanSource) return "";
+    return '<a class="pill src-link" href="' + esc(c.scanSource.url) + '" target="_blank" rel="noopener">🔎 ' +
+      esc(c.scanSource.label) + ' ↗</a>';
+  }
+  function runScan(url, domain) {
+    var id = "w-scan-" + (state.added.length + 1);
+    state.added.push({
+      id: id, title: "Untitled work", year: "", disciplines: [], modules: ["performance"],
+      sources: [], confidence: 0.6, description: "",
+      scanSource: { label: domain, url: url }, fromScan: true
+    });
+    state._lastScanId = id; save();
+    toast("Found a candidate via " + domain + " — add its details");
+    if (currentRoute().name === "review") render(); else location.hash = "#/review";
+  }
+  function buildScanControl() {
+    var box = el(
+      '<div class="scan-box">' +
+        '<div class="scan-label">Missed a source? <b>Point us at it</b> — your gallery, a museum record, a video page.</div>' +
+        '<div class="scan-row">' +
+          '<input class="scan-input" type="url" placeholder="https://your-gallery.com/your-page" aria-label="Source URL">' +
+          '<button class="btn primary scan-go">Scan</button>' +
+        '</div>' +
+        '<div class="scan-status"></div>' +
+      '</div>');
+    var input = box.querySelector(".scan-input"), go = box.querySelector(".scan-go"), status = box.querySelector(".scan-status");
+    function submit() {
+      var raw = input.value.trim();
+      if (!/\.\w{2,}/.test(raw)) { status.textContent = "Enter a full link, e.g. https://your-gallery.com"; return; }
+      var url = /^https?:\/\//i.test(raw) ? raw : "https://" + raw;
+      var domain = deriveDomain(url);
+      go.disabled = true; input.disabled = true;
+      status.innerHTML = '<span class="spinner"></span> scanning ' + esc(domain) + '… <span class="scan-demo">(demo)</span>';
+      setTimeout(function () { runScan(url, domain); }, 1300);
+    }
+    go.addEventListener("click", submit);
+    input.addEventListener("keydown", function (e) { if (e.key === "Enter") submit(); });
+    return box;
+  }
 
   /* ============================================================== VIEW: claim */
   function viewClaim() {
@@ -235,6 +286,7 @@
     var list = el('<div class="cards"></div>');
     cands.forEach(function (c) { list.appendChild(previewCard(c)); });
     container.appendChild(list);
+    container.appendChild(buildScanControl());
     container.appendChild(el('<div class="btn-row"><a class="btn primary big" href="#/review">Review & confirm →</a></div>'));
   }
   function previewCard(c) {
@@ -245,7 +297,7 @@
         cardVisual(c, g) +
         '<div class="info"><div class="wtitle">' + esc(c.title) + '</div>' +
           '<div class="wsub">' + esc(c.year || "") + (c.disciplines ? ' · ' + esc(c.disciplines.join(", ")) : "") + '</div>' +
-          '<div class="src-row">' + srcs + creditChip(c) +
+          '<div class="src-row">' + srcs + scanPill(c) + creditChip(c) +
             '<span class="pill conf">confidence ' + Math.round((c.confidence || 0.5) * 100) + '%</span>' +
           '</div>' +
         '</div>' +
@@ -275,6 +327,14 @@
     node.appendChild(list);
     node.appendChild(el('<div class="btn-row"><button class="btn ghost" id="add-work">+ Add a work we missed</button></div>'));
     node.querySelector("#add-work").addEventListener("click", function () { openAddForm(node); });
+    node.appendChild(buildScanControl());
+    if (state._lastScanId) {
+      var scanId = state._lastScanId; state._lastScanId = null; save();
+      setTimeout(function () {
+        var card = document.getElementById("card-" + scanId);
+        if (card) card.scrollIntoView({ behavior: "smooth", block: "center" });
+      }, 60);
+    }
     return node;
   }
 
@@ -282,7 +342,7 @@
     var c = candidate(id);
     var st = state.reviewed[id];
     var g = glyphFor(c);
-    var wrap = el('<div class="wcard' + (st ? " resolved" : "") + (c.issue && !st ? " flag-issue" : "") + '"></div>');
+    var wrap = el('<div class="wcard' + (st ? " resolved" : "") + (c.issue && !st ? " flag-issue" : "") + '" id="card-' + esc(id) + '"></div>');
 
     var srcs = (c.sources || []).map(sourcePill).join("");
     var statusTag = st ? '<span class="status-tag ' + st + '">' + st + "</span>" : "";
@@ -294,7 +354,7 @@
           '<div class="wsub">' + esc(c.year || "") + (c.disciplines ? ' · ' + esc(c.disciplines.join(", ")) : "") +
              (c.coAuthors ? ' · ' + esc(c.coAuthors.map(function (a) { return a.name; }).join(" + ")) : "") + '</div>' +
           (c.description ? '<div class="wdesc">' + esc(c.description) + '</div>' : "") +
-          '<div class="src-row">' + srcs + creditChip(c) + '<span class="pill conf">confidence ' + Math.round((c.confidence || .5) * 100) + '%</span></div>' +
+          '<div class="src-row">' + srcs + scanPill(c) + creditChip(c) + '<span class="pill conf">confidence ' + Math.round((c.confidence || .5) * 100) + '%</span></div>' +
         '</div>' +
       '</div>');
     wrap.appendChild(main);
