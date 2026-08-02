@@ -106,7 +106,7 @@
     var a = SEED.artist;
     var node = el('<div class="view claim"></div>');
     node.innerHTML =
-      '<div class="eyebrow">Sweat Variant Pod · invited by Katie Dixon</div>' +
+      '<div class="eyebrow">Sweat Variant Pod · artist-led</div>' +
       '<div class="lede">Let’s build your catalogue.</div>' +
       '<p>Plataforma is a cooperative directory that artists own. First, we’ll find what’s ' +
       'already out there about your work — so you start by confirming, not typing from a blank page.</p>' +
@@ -130,7 +130,7 @@
     node.appendChild(el(
       '<div class="view-head"><div class="eyebrow">Step 1 · Discovery</div>' +
       '<h1>Searching your sources…</h1>' +
-      '<p>Not a museum dump — Plataforma looks where <em>your</em> record actually lives: your site, ' +
+      '<p>Plataforma looks where <em>your</em> record actually lives — your site, ' +
       'open data, the collections that hold your work, and the press.</p></div>'));
 
     var tiles = el('<div class="sources"></div>');
@@ -389,7 +389,7 @@
 
   function exportCatalogue() {
     var payload = {
-      "@context": "https://plataforma.coop/schema/prototype/v0.1",
+      "@context": "https://plataforma.haak.world/schema/prototype/v0.1",
       practice: SEED.artist.practice,
       artist: { name: SEED.artist.name, wikidata: SEED.artist.wikidata },
       works: confirmedList().map(function (w) {
@@ -450,7 +450,7 @@
     var works = confirmedList().filter(function (w) { return isPublished(w.id); });
 
     node.appendChild(el('<div class="crumb" style="color:var(--faint);font-size:13px;margin-bottom:12px">' +
-      'Public directory · what a curator or collector sees</div>'));
+      'Public directory · what a curator, presenter, or peer sees</div>'));
 
     var hero = el(
       '<div class="public-hero">' +

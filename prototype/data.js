@@ -83,7 +83,7 @@ window.PLATAFORMA_SEED = {
     {
       id: "w-pptr",
       title: "poor people's tv room",
-      year: "2021",
+      year: "2022",
       disciplines: ["performance", "dance", "installation"],
       modules: ["performance", "installation"],
       sources: ["website", "collections", "press"],
@@ -96,10 +96,10 @@ window.PLATAFORMA_SEED = {
       realisations: [
         { type: "Production", title: "poor people's tv room (SOLO)", dateRange: "2014–2016", venues: [] },
         { type: "Production", title: "ensemble", dateRange: "2017–2019", venues: [] },
-        { type: "Installation", title: "acquired installation", dateRange: "2021", venues: ["Whitney", "Hammer"] }
+        { type: "Installation", title: "installation (video)", dateRange: "2017 · acquired 2022", venues: ["Whitney", "Hammer"] }
       ],
       issue: "needs-fix",
-      issueNote: "We guessed the year from the museum installation (2021), but this premiered as an ensemble work in 2017 — and Peter Born isn't credited yet. Fix the date and add the co-author.",
+      issueNote: "We guessed the year from the museum acquisition (2022), but this premiered as an ensemble work in 2017 — and Peter Born isn't credited yet. Fix the date and add the co-author.",
       fix: { field: "year", suggested: "2017", addCoAuthor: { name: "Peter Born", role: "director · design" } }
     },
     {
@@ -159,10 +159,10 @@ window.PLATAFORMA_SEED = {
 
   pod: {
     name: "Sweat Variant Pod",
-    convener: "Katie Dixon",
+    convener: "Okwui Okpokwasili",
     blurb: "Pods onboard as a cluster: a leader brings their real collaborators. The directory renders the Pod as an interconnected web — one artist's page is a gateway to the others.",
     members: [
-      { name: "Okwui Okpokwasili", role: "Co-lead · performer, choreographer", discipline: "Performance", state: "joined", you: true },
+      { name: "Okwui Okpokwasili", role: "Pod lead · performer, choreographer", discipline: "Performance", state: "joined", you: true },
       { name: "Peter Born", role: "Co-author, sweat variant", discipline: "Direction · design · film", state: "joined", site: "sweatvariant.com" },
       { name: "Wanjiru Kamuyu", role: "Performer — Bronx Gothic restaging", discipline: "Dance", state: "invited", note: "Surfaced from a shared credit on Bronx Gothic (2022)." },
       { name: "Ralph Lemon", role: "Collaborator", discipline: "Choreography · visual art", state: "discovered", note: "Surfaced from your collaboration graph — invite to the Pod?" }
