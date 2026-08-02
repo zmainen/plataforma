@@ -48,6 +48,7 @@ window.PLATAFORMA_SEED = {
     {
       id: "w-bronx-gothic",
       title: "Bronx Gothic",
+      media: { src: "img/works/bronx-gothic.jpg", credit: "Ian Douglas", sourceUrl: "https://www.sweatvariant.com/bronx-gothic" },
       year: "2014",
       disciplines: ["performance", "dance", "theatre"],
       modules: ["performance"],
@@ -83,6 +84,7 @@ window.PLATAFORMA_SEED = {
     {
       id: "w-pptr",
       title: "poor people's tv room",
+      media: { src: "img/works/pptr.jpg", credit: "Ian Douglas", sourceUrl: "https://www.sweatvariant.com/poor-peoples-tv-room" },
       year: "2022",
       disciplines: ["performance", "dance", "installation"],
       modules: ["performance", "installation"],
@@ -105,6 +107,7 @@ window.PLATAFORMA_SEED = {
     {
       id: "w-sitting",
       title: "Sitting on a Man's Head",
+      media: { src: "img/works/sitting.jpg", credit: "Ian Douglas", sourceUrl: "https://www.sweatvariant.com/sitting-on-a-mans-head" },
       year: "2019",
       disciplines: ["performance", "installation"],
       modules: ["performance", "installation"],
@@ -120,6 +123,7 @@ window.PLATAFORMA_SEED = {
     {
       id: "w-pent-up",
       title: "pent-up: a revenge dance",
+      media: { src: "img/works/pent-up.jpg", credit: "Peter Born, 2009", sourceUrl: "https://www.sweatvariant.com/pent-up-a-revenge-dance" },
       year: "2017",
       disciplines: ["performance", "dance"],
       modules: ["performance"],

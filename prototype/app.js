@@ -97,6 +97,21 @@
     cardNode.appendChild(toggle);
     cardNode.appendChild(panel);
   }
+  // The card visual: an artist-granted image clip when present, else the glyph.
+  function cardVisual(c, g) {
+    if (c.media && c.media.src) {
+      return '<div class="glyph has-img ' + (g && g.cls ? g.cls : "") + '">' +
+        '<img loading="lazy" src="' + esc(c.media.src) + '" alt="' + esc(c.title) + '"></div>';
+    }
+    g = g || glyphFor(c);
+    return '<div class="glyph ' + g.cls + '">' + esc(g.ch) + '</div>';
+  }
+  // Visible, linked attribution — the rights-clean signal that travels with the image.
+  function creditChip(c) {
+    if (!(c.media && c.media.credit)) return "";
+    return '<a class="pill credit" href="' + esc(c.media.sourceUrl || "#") + '" target="_blank" rel="noopener">Photo: ' +
+      esc(c.media.credit) + ' ↗</a>';
+  }
 
   /* ------------------------------------------------------------------ steps */
   var STEPS = [
@@ -227,10 +242,10 @@
     var srcs = (c.sources || []).map(sourcePill).join("");
     var node = el(
       '<div class="wcard"><div class="wcard-main">' +
-        '<div class="glyph ' + g.cls + '">' + esc(g.ch) + '</div>' +
+        cardVisual(c, g) +
         '<div class="info"><div class="wtitle">' + esc(c.title) + '</div>' +
           '<div class="wsub">' + esc(c.year || "") + (c.disciplines ? ' · ' + esc(c.disciplines.join(", ")) : "") + '</div>' +
-          '<div class="src-row">' + srcs +
+          '<div class="src-row">' + srcs + creditChip(c) +
             '<span class="pill conf">confidence ' + Math.round((c.confidence || 0.5) * 100) + '%</span>' +
           '</div>' +
         '</div>' +
@@ -273,13 +288,13 @@
     var statusTag = st ? '<span class="status-tag ' + st + '">' + st + "</span>" : "";
     var main = el(
       '<div class="wcard-main">' +
-        '<div class="glyph ' + g.cls + '">' + esc(g.ch) + '</div>' +
+        cardVisual(c, g) +
         '<div class="info">' +
           '<div class="wtitle">' + esc(c.title) + " " + statusTag + '</div>' +
           '<div class="wsub">' + esc(c.year || "") + (c.disciplines ? ' · ' + esc(c.disciplines.join(", ")) : "") +
              (c.coAuthors ? ' · ' + esc(c.coAuthors.map(function (a) { return a.name; }).join(" + ")) : "") + '</div>' +
           (c.description ? '<div class="wdesc">' + esc(c.description) + '</div>' : "") +
-          '<div class="src-row">' + srcs + '<span class="pill conf">confidence ' + Math.round((c.confidence || .5) * 100) + '%</span></div>' +
+          '<div class="src-row">' + srcs + creditChip(c) + '<span class="pill conf">confidence ' + Math.round((c.confidence || .5) * 100) + '%</span></div>' +
         '</div>' +
       '</div>');
     wrap.appendChild(main);
@@ -410,7 +425,7 @@
       var item = el('<div class="cat-item"></div>');
       var row = el(
         '<div class="cat-row">' +
-          '<div class="glyph">' + esc(g.ch) + '</div>' +
+          cardVisual(w, g) +
           '<div><div class="ctitle">' + esc(w.title) + (w.addedByArtist ? ' <span class="pill disc">added by you</span>' : "") + '</div>' +
             '<div class="cmeta">' + esc(w.year || "") + (w.disciplines ? ' · ' + esc(w.disciplines.join(", ")) : "") + '</div></div>' +
           '<div class="spacer"></div>' +
@@ -524,12 +539,15 @@
     node.appendChild(el('<h2 class="view-head" style="font-family:var(--serif);font-size:20px;margin:6px 0 14px">Works (' + works.length + ')</h2>'));
     var grid = el('<div class="pub-grid"></div>');
     works.forEach(function (w) {
-      var g = glyphFor(w);
+      var pglyph = (w.media && w.media.src)
+        ? '<div class="pw-glyph has-img"><img loading="lazy" src="' + esc(w.media.src) + '" alt="' + esc(w.title) + '"></div>'
+        : '<div class="pw-glyph">' + esc(w.title) + '</div>';
+      var pcred = (w.media && w.media.credit)
+        ? '<div class="pw-cred">Photo: ' + esc(w.media.credit) + '</div>' : "";
       grid.appendChild(el(
-        '<a class="pub-work" href="#/catalogue">' +
-          '<div class="pw-glyph">' + esc(w.title) + '</div>' +
+        '<a class="pub-work" href="#/catalogue">' + pglyph +
           '<div class="pw-body"><div class="pw-title">' + esc(w.title) + '</div>' +
-            '<div class="pw-meta">' + esc(w.year || "") + (w.disciplines ? ' · ' + esc(w.disciplines.join(", ")) : "") + '</div>' +
+            '<div class="pw-meta">' + esc(w.year || "") + (w.disciplines ? ' · ' + esc(w.disciplines.join(", ")) : "") + '</div>' + pcred +
           '</div>' +
         '</a>'));
     });
