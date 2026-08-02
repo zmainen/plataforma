@@ -71,6 +71,7 @@ window.PLATAFORMA_SEED = {
     {
       id: "w-bg-oval",
       title: "Bronx Gothic: the oval",
+      media: { src: "img/works/bg-oval.jpg", credit: "Ian Douglas", sourceUrl: "https://www.sweatvariant.com/bronx-gothic" },
       year: "2014",
       disciplines: ["performance", "installation"],
       modules: ["performance", "installation"],
@@ -138,6 +139,7 @@ window.PLATAFORMA_SEED = {
     {
       id: "w-adaku",
       title: "Adaku's Revolt",
+      media: { src: "img/works/adaku.jpg", credit: "Ian Douglas", sourceUrl: "https://www.sweatvariant.com/adakus-revolt" },
       year: "2018",
       disciplines: ["performance", "theatre"],
       modules: ["performance"],
