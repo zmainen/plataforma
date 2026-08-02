@@ -290,6 +290,9 @@
 
     var actions = el('<div class="wcard-actions"></div>');
     if (st) {
+      if (st === "confirmed") {
+        actions.appendChild(mkBtn("act", "✎ Edit", function () { toggleEdit(wrap, id); }));
+      }
       actions.appendChild(mkBtn("act undo", "↺ Undo", function () { delete state.reviewed[id]; save(); render(); }));
     } else {
       if (c.issue === "duplicate") {
@@ -404,18 +407,21 @@
     works.forEach(function (w) {
       var g = glyphFor(w);
       var on = isPublished(w.id);
+      var item = el('<div class="cat-item"></div>');
       var row = el(
         '<div class="cat-row">' +
           '<div class="glyph">' + esc(g.ch) + '</div>' +
           '<div><div class="ctitle">' + esc(w.title) + (w.addedByArtist ? ' <span class="pill disc">added by you</span>' : "") + '</div>' +
             '<div class="cmeta">' + esc(w.year || "") + (w.disciplines ? ' · ' + esc(w.disciplines.join(", ")) : "") + '</div></div>' +
           '<div class="spacer"></div>' +
+          '<button class="cat-edit act">✎ Edit</button>' +
           '<div class="toggle" role="button" tabindex="0"><span>' + (on ? "Public" : "Draft") +
             '</span><span class="switch ' + (on ? "on" : "") + '"></span></div>' +
         '</div>');
-      var tog = row.querySelector(".toggle");
-      tog.addEventListener("click", function () { state.published[w.id] = !isPublished(w.id); save(); render(); });
-      node.appendChild(row);
+      row.querySelector(".toggle").addEventListener("click", function () { state.published[w.id] = !isPublished(w.id); save(); render(); });
+      row.querySelector(".cat-edit").addEventListener("click", function () { toggleEdit(item, w.id); });
+      item.appendChild(row);
+      node.appendChild(item);
     });
 
     var mergedNotes = allCandidates().filter(function (c) { return state.reviewed[c.id] === "merged"; });

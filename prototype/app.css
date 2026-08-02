@@ -145,6 +145,10 @@ main { padding: 34px 0 70px; min-height: 60vh; }
 .bar > i { display: block; height: 100%; background: var(--ok); transition: width .3s ease; }
 
 /* Catalogue */
+.cat-item { margin-bottom: 10px; }
+.cat-item .cat-row { margin-bottom: 0; }
+.cat-item .edit-form { border: 1px solid var(--line); border-top: 1px dashed var(--line); border-radius: 0 0 var(--radius) var(--radius); margin-top: -1px; }
+.cat-edit { padding: 6px 12px; font-size: 12.5px; }
 .cat-row { display: flex; align-items: center; gap: 14px; padding: 13px 16px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); margin-bottom: 10px; }
 .cat-row .glyph { flex: 0 0 44px; height: 44px; font-size: 18px; border-radius: 7px; background: var(--accent-soft); color: var(--accent); display: flex; align-items: center; justify-content: center; font-family: var(--serif); }
 .cat-row .ctitle { font-family: var(--serif); font-size: 16px; }
