@@ -1,0 +1,491 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://plataforma.haak.world/schema/prototype/v0.1.json",
+  "title": "Plataforma catalogue data model (prototype)",
+  "description": "Machine-readable expression of the v3 modular catalogue-raisonne schema (see ../../catalog-schema/schema-v3-modular.md). A directory of authored creative works across media. Top-level browsable entity is the Practice (a solo artist is a Practice of one member). Works carry form-specific modules. This prototype implements the base spine plus the object and performance modules; the full v3 also specifies installation, screen, text, and design modules.",
+  "type": "object",
+  "properties": {
+    "people": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/person"
+      }
+    },
+    "practices": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/practice"
+      }
+    },
+    "works": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/work"
+      }
+    },
+    "exhibitions": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/exhibition"
+      }
+    },
+    "organisations": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/organisation"
+      }
+    }
+  },
+  "$defs": {
+    "person": {
+      "type": "object",
+      "description": "A human. Identifier prefix p-.",
+      "required": [
+        "id",
+        "type",
+        "name"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^p-"
+        },
+        "type": {
+          "const": "person"
+        },
+        "name": {
+          "type": "string"
+        },
+        "nameVariants": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "birthYear": {
+          "type": "string"
+        },
+        "deathYear": {
+          "type": "string"
+        },
+        "nationality": {
+          "type": "string"
+        },
+        "bio": {
+          "type": "string"
+        },
+        "roles": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "wikidataId": {
+          "type": "string"
+        },
+        "ulanId": {
+          "type": "string"
+        },
+        "isniId": {
+          "type": "string"
+        }
+      }
+    },
+    "practice": {
+      "type": "object",
+      "description": "Layer 0. One or more people working under a shared identity. The top-level browsable entity. A solo artist is a Practice with one member. Identifier prefix pc-.",
+      "required": [
+        "id",
+        "type",
+        "name",
+        "members"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^pc-"
+        },
+        "type": {
+          "const": "practice"
+        },
+        "name": {
+          "type": "string"
+        },
+        "nameVariants": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "members": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "person"
+            ],
+            "properties": {
+              "person": {
+                "type": "string"
+              },
+              "role": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "formed": {
+          "type": "string"
+        },
+        "dissolved": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "disciplines": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "movements": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "website": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "seededFrom": {
+          "type": "string",
+          "enum": [
+            "museum",
+            "artist",
+            "web",
+            "manual"
+          ],
+          "description": "Provenance of the record. 'museum' = auto-populated from open collection data; 'artist' = the artist granted / confirmed it."
+        },
+        "identifiers": {
+          "type": "object"
+        }
+      }
+    },
+    "work": {
+      "type": "object",
+      "description": "Layer 1. An authored creative work (base record). Carries form-specific modules named in `modules`. Identifier prefix w-.",
+      "required": [
+        "id",
+        "type",
+        "practice",
+        "title",
+        "modules"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^w-"
+        },
+        "type": {
+          "const": "work"
+        },
+        "practice": {
+          "type": "string",
+          "description": "The Practice that made this work."
+        },
+        "catalogueNumber": {
+          "type": "string"
+        },
+        "title": {
+          "description": "A plain string, or an array of language-tagged values.",
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            }
+          ]
+        },
+        "authors": {
+          "type": "array",
+          "description": "v3 §3.2 authorship. Peer-level authors, each with their own roles — there is no 'primary artist' field. The Practice is who made the work; `authors` records who did what within it.",
+          "items": {
+            "type": "object",
+            "required": [
+              "person"
+            ],
+            "properties": {
+              "person": {
+                "type": "string",
+                "description": "Person id (p- prefix)."
+              },
+              "roles": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "creditAs": {
+                "type": "string",
+                "description": "The credit exactly as the artists write it."
+              },
+              "ordering": {
+                "type": "integer"
+              }
+            }
+          }
+        },
+        "modules": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "object",
+              "performance",
+              "installation",
+              "screen",
+              "text",
+              "design"
+            ]
+          }
+        },
+        "dateCreated": {
+          "type": [
+            "string",
+            "object"
+          ]
+        },
+        "disciplines": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "description": {
+          "type": [
+            "string",
+            "array"
+          ]
+        },
+        "image": {
+          "type": "object",
+          "description": "A representative image and its rights. Only present where a licence permits (CC0 for museum-seeded works).",
+          "properties": {
+            "small": {
+              "type": "string"
+            },
+            "large": {
+              "type": "string"
+            },
+            "source": {
+              "type": "string"
+            },
+            "license": {
+              "type": "string"
+            },
+            "rightsHolder": {
+              "type": "string"
+            },
+            "sourceUrl": {
+              "type": "string"
+            }
+          }
+        },
+        "module_object": {
+          "type": "object",
+          "description": "v3 module:object.",
+          "properties": {
+            "medium": {
+              "type": "string"
+            },
+            "dimensions": {
+              "type": "string"
+            },
+            "support": {
+              "type": "string"
+            }
+          }
+        },
+        "module_performance": {
+          "type": "object",
+          "description": "v3 module:performance.",
+          "properties": {
+            "intendedDuration": {
+              "type": "string"
+            },
+            "premiere": {
+              "type": "string"
+            },
+            "restagingPolicy": {
+              "type": "object"
+            },
+            "commissioning": {
+              "type": "array"
+            },
+            "funding": {
+              "type": "array"
+            },
+            "realisations": {
+              "type": "array",
+              "description": "Layer 2 realisations (productions) folded inline for the prototype.",
+              "items": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        "collection": {
+          "type": "object",
+          "properties": {
+            "holder": {
+              "type": "string"
+            },
+            "holderName": {
+              "type": "string"
+            },
+            "accessionNumber": {
+              "type": "string"
+            }
+          }
+        },
+        "exhibitions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "externalIds": {
+          "type": "object"
+        },
+        "provenance": {
+          "type": "string",
+          "enum": [
+            "auto-populated",
+            "artist-confirmed",
+            "manual"
+          ],
+          "description": "Whether this record was machine-seeded and still awaits the artist's confirm/correct step, or has been confirmed."
+        }
+      }
+    },
+    "exhibition": {
+      "type": "object",
+      "description": "Layer 5. A first-class curatorial event that Works appear in. Identifier prefix e-.",
+      "required": [
+        "id",
+        "type",
+        "title"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^e-"
+        },
+        "type": {
+          "const": "exhibition"
+        },
+        "title": {
+          "type": "string"
+        },
+        "venue": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "dateRange": {
+          "type": [
+            "string",
+            "object"
+          ]
+        },
+        "curator": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "description": {
+          "type": "string"
+        },
+        "worksIncluded": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "work": {
+                "type": "string"
+              },
+              "practice": {
+                "type": "string"
+              },
+              "mode": {
+                "enum": [
+                  "exhibited",
+                  "performed",
+                  "screened",
+                  "installed",
+                  "activated"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "organisation": {
+      "type": "object",
+      "description": "An institution: museum, gallery, funder, producer, presenter. Identifier prefix o-.",
+      "required": [
+        "id",
+        "type",
+        "name"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^o-"
+        },
+        "type": {
+          "const": "organisation"
+        },
+        "name": {
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "museum",
+            "gallery",
+            "funder",
+            "producer",
+            "presenter",
+            "commissioner",
+            "festival",
+            "archive",
+            "other"
+          ]
+        },
+        "location": {
+          "type": "string"
+        },
+        "website": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

@@ -525,18 +525,162 @@
     return node;
   }
 
-  function exportCatalogue() {
-    var payload = {
-      "@context": "https://plataforma.haak.world/schema/prototype/v0.1",
-      practice: SEED.artist.practice,
-      artist: { name: SEED.artist.name, wikidata: SEED.artist.wikidata },
-      works: confirmedList().map(function (w) {
-        return { id: w.id, title: w.title, year: w.year, disciplines: w.disciplines,
-                 modules: w.modules, coAuthors: w.coAuthors, description: w.description,
-                 published: isPublished(w.id) };
-      }),
-      exported: "prototype-demo"
+  /* ------------------------------------------------------------------ export
+     What the artist downloads is a real catalogue: records shaped by
+     schema/plataforma.schema.json (people · practices · works · exhibitions ·
+     organisations), not a flattened summary. Demo-only state (which works are
+     public, which were merged) lives under _meta so the records stay clean.
+
+     Exposed as window.PLATAFORMA_EXPORT so the payload can be validated
+     against the schema without downloading it. */
+  function slugId(prefix, name) {
+    return prefix + String(name).toLowerCase()
+      .normalize("NFD").replace(/[̀-ͯ]/g, "")
+      .replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+  }
+
+  function buildExport() {
+    var practice = SEED.artist.practice;
+    var works = confirmedList();
+
+    /* One resolver for person ids, so every reference points at a record that
+       exists — the artist keeps the id the seed gave her. */
+    function personId(name) {
+      return (name === SEED.artist.name) ? SEED.artist.id : slugId("p-", name);
+    }
+
+    /* people — the artist, the practice's members, and every credited co-author */
+    var people = [], seenPerson = {};
+    function addPerson(name, extra) {
+      var id = personId(name);
+      if (seenPerson[id]) return id;
+      seenPerson[id] = true;
+      var p = { id: id, type: "person", name: name };
+      Object.keys(extra || {}).forEach(function (k) { if (extra[k]) p[k] = extra[k]; });
+      people.push(p);
+      return id;
+    }
+    addPerson(SEED.artist.name, {
+      birthYear: SEED.artist.born, nationality: SEED.artist.nationality,
+      bio: SEED.artist.bio, wikidataId: SEED.artist.wikidata, ulanId: SEED.artist.ulan
+    });
+    (practice.members || []).forEach(function (m) { addPerson(m.name); });
+    works.forEach(function (w) {
+      (w.coAuthors || []).forEach(function (a) { addPerson(a.name); });
+    });
+
+    /* organisations — everyone credited as commissioner, funder or holder */
+    var orgs = [], seenOrg = {};
+    function addOrg(name, kind) {
+      var id = slugId("o-", name);
+      if (!seenOrg[id]) { seenOrg[id] = true; orgs.push({ id: id, type: "organisation", name: name, kind: kind }); }
+      return id;
+    }
+
+    var exportedWorks = works.map(function (w) {
+      var rec = {
+        id: w.id,
+        type: "work",
+        practice: practice.id,
+        title: w.title,
+        modules: (w.modules || []).slice(),
+        provenance: w.addedByArtist ? "manual" : "artist-confirmed"
+      };
+      /* Authors are peer-level, each with their own roles — the credit survives
+         the export, which is the whole point of a practice-shaped catalogue. */
+      if (w.coAuthors && w.coAuthors.length) {
+        rec.authors = w.coAuthors.map(function (a, i) {
+          var au = { person: personId(a.name), ordering: i + 1 };
+          if (a.role) au.roles = a.role.split("·").map(function (r) { return r.trim(); }).filter(Boolean);
+          return au;
+        });
+      }
+      if (w.year) rec.dateCreated = w.year;
+      if (w.disciplines) rec.disciplines = w.disciplines.slice();
+      if (w.description) rec.description = w.description;
+
+      /* an artist-granted image clip, with the credit it must carry */
+      if (w.media && w.media.src) {
+        rec.image = { small: w.media.src, license: "artist-granted", source: "artist" };
+        if (w.media.credit) rec.image.rightsHolder = w.media.credit;
+        if (w.media.sourceUrl) rec.image.sourceUrl = w.media.sourceUrl;
+      }
+
+      if (rec.modules.indexOf("performance") >= 0) {
+        var mp = {};
+        if (w.duration) mp.intendedDuration = w.duration;
+        if (w.commissioners) {
+          mp.commissioning = w.commissioners.map(function (n) {
+            return { organisation: addOrg(n, "commissioner"), name: n, role: "commissioner" };
+          });
+        }
+        if (w.funders) {
+          mp.funding = w.funders.map(function (n) {
+            return { organisation: addOrg(n, "funder"), name: n, role: "funder" };
+          });
+        }
+        if (w.realisations) {
+          mp.realisations = w.realisations.map(function (r) {
+            var out = { realisationType: r.type === "Installation" ? "exhibition-instance" : "production" };
+            if (r.title) out.title = r.title;
+            if (r.dateRange) out.dateRange = r.dateRange;
+            if (r.venues && r.venues.length) out.venues = r.venues.slice();
+            return out;
+          });
+        }
+        if (Object.keys(mp).length) rec.module_performance = mp;
+      }
+
+      if (w.collection && w.collection.holder) {
+        var holders = String(w.collection.holder).split(" · ");
+        rec.collection = { holderName: w.collection.holder };
+        holders.forEach(function (h) { addOrg(h, "museum"); });
+        if (holders.length === 1) rec.collection.holder = slugId("o-", holders[0]);
+        if (w.collection.accessionNumber) rec.collection.accessionNumber = w.collection.accessionNumber;
+      }
+      return rec;
+    });
+
+    var merged = allCandidates().filter(function (c) { return state.reviewed[c.id] === "merged"; });
+
+    return {
+      "$schema": "https://plataforma.haak.world/schema/prototype/v0.1.json",
+      _meta: {
+        exportedBy: "Plataforma prototype",
+        exportedAt: new Date().toISOString(),
+        note: "Demo data. Records conform to the prototype schema; the full model " +
+              "additionally specifies individual performances, documentation and collection records.",
+        publishedWorks: exportedWorks.filter(function (w) { return isPublished(w.id); })
+                                     .map(function (w) { return w.id; }),
+        mergedAsVersions: merged.map(function (c) {
+          return { id: c.id, title: candidate(c.id).title, into: c.issueOf || null };
+        })
+      },
+      people: people,
+      practices: [{
+        id: practice.id,
+        type: "practice",
+        name: practice.name,
+        members: (practice.members || []).map(function (m) {
+          var mem = { person: personId(m.name) };
+          if (m.role) mem.role = m.role;
+          return mem;
+        }),
+        formed: practice.formed,
+        description: practice.note,
+        disciplines: (practice.disciplines || []).slice(),
+        website: SEED.artist.site ? ["https://" + SEED.artist.site] : [],
+        seededFrom: "artist"
+      }],
+      works: exportedWorks,
+      exhibitions: [],
+      organisations: orgs
     };
+  }
+  window.PLATAFORMA_EXPORT = buildExport;
+
+  function exportCatalogue() {
+    var payload = buildExport();
     var blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
     var url = URL.createObjectURL(blob);
     var a = document.createElement("a");
