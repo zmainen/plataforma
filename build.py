@@ -229,7 +229,7 @@ def render_markdown(md: str) -> str:
 # ---------------------------------------------------------------------------
 
 def clean_for_web(md: str) -> str:
-    """Remove Artsy, Beowolff, and HAAK references from markdown before render."""
+    """Remove Artsy, Beowolff, and HaaK references from markdown before render."""
     md = re.sub(r'Artsy and similar platforms are marketplaces first',
                 'Existing platforms are marketplaces first', md)
     md = re.sub(r'Artsy and similar platforms', 'existing platforms', md)
@@ -247,13 +247,27 @@ DOC_NAV = [
     ("03-cooperative-not-platform", "A cooperative, not a platform", "03-cooperative-not-platform.html"),
     ("04-how-it-works", "How it works", "04-how-it-works.html"),
     ("05-where-this-goes", "Where this goes", "05-where-this-goes.html"),
+    ("section", "The data model"),
+    ("data-model-2026-09", "How the catalogue is built", "data-model-2026-09.html"),
     ("section", "Documents"),
     ("founders-concept-2026-03", "Founders' concept", "founders-concept-2026-03.html"),
     ("technical-extension-2026-05", "Technical extension", "technical-extension-2026-05.html"),
 ]
 
-BRIEF_NAV = [e for e in DOC_NAV if e[0] not in ("section",
+BRIEF_NAV = [e for e in DOC_NAV if e[0] not in ("section", "data-model-2026-09",
              "founders-concept-2026-03", "technical-extension-2026-05")]
+
+# One-line descriptions for the docs index (mirror the homepage brief cards).
+DOC_DESCRIPTIONS = {
+    "01-why-now": "The organizing moment for artists — and why cooperative infrastructure is possible to build today.",
+    "02-what-artists-need": "Control over your own record, professional connection, and collective leverage — none of them a better app.",
+    "03-cooperative-not-platform": "Why the governance structure is the product, and what it makes possible that no platform can promise.",
+    "04-how-it-works": "Auto-populated catalogs, one persistent identity, and a map of creative relationships that finally exists online.",
+    "05-where-this-goes": "From a NYC pilot to the professional infrastructure artists never had.",
+    "data-model-2026-09": "What an artist's record holds, every field in it, and the reasoning behind each one — with Bronx Gothic as the specimen.",
+    "founders-concept-2026-03": "Katie Dixon & Okwui Okpokwasili's originating concept (March 2026).",
+    "technical-extension-2026-05": "Zach Mainen's technical articulation of the data architecture (May 2026).",
+}
 
 
 def render_doc_page(title: str, body_html: str, current_slug: str,
@@ -287,6 +301,66 @@ def render_doc_page(title: str, body_html: str, current_slug: str,
     {body_html}
   </article>
 </main>
+</body>
+</html>
+"""
+
+
+def build_docs_index() -> str:
+    """Docs landing page (docs/index.html) so /docs/ resolves instead of 404."""
+    sections: list[str] = ['<h1>Documents</h1>',
+                           '<p>The thinking behind Plataforma — the landscape it '
+                           'responds to, and the founding documents.</p>']
+    open_list = False
+    for entry in DOC_NAV:
+        if entry[0] == "section":
+            if open_list:
+                sections.append("</ul>")
+            sections.append(f"<h2>{entry[1]}</h2>")
+            sections.append("<ul>")
+            open_list = True
+        else:
+            slug, label, link = entry
+            desc = DOC_DESCRIPTIONS.get(slug, "")
+            sections.append(
+                f'<li><a href="{link}">{label}</a>'
+                + (f" — {desc}" if desc else "")
+                + "</li>"
+            )
+    if open_list:
+        sections.append("</ul>")
+    body_html = "\n".join(sections)
+    return render_doc_page(
+        "Documents", body_html, "index",
+        description="The landscape Plataforma responds to, and the founding documents.",
+    )
+
+
+def build_404() -> str:
+    """Branded 404 served by GitHub Pages for any unknown path. Absolute asset
+    paths so it styles correctly regardless of the URL that triggered it."""
+    return """<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Page not found — Plataforma.">
+<title>Not found — Plataforma</title>
+<link rel="stylesheet" href="/style.css">
+<style>
+  .nf-wrap{min-height:80vh;display:flex;flex-direction:column;align-items:center;
+    justify-content:center;text-align:center;padding:2rem;gap:.75rem}
+  .nf-wrap h1{font-size:3rem;margin:0}
+  .nf-wrap p{max-width:32rem;margin:0 auto}
+  .nf-wrap a{font-weight:600}
+</style>
+</head>
+<body>
+<div class="nf-wrap">
+  <h1>Plataforma<span class="dot">.</span></h1>
+  <p>That page doesn't exist. It may have moved, or the link may be mistyped.</p>
+  <p><a href="/">Return to the homepage</a> &middot; <a href="/docs/">Read the documents</a></p>
+</div>
 </body>
 </html>
 """
@@ -457,6 +531,7 @@ def main() -> int:
 
     sources = [
         *(sorted(BRIEFS_DIR.glob("*.md")) if BRIEFS_DIR.is_dir() else []),
+        PROJECT_DIR / "data-model-2026-09.md",
         PROJECT_DIR / "founders-concept-2026-03.md",
         PROJECT_DIR / "technical-extension-2026-05.md",
     ]
@@ -468,6 +543,14 @@ def main() -> int:
         out = DOCS_DIR / f"{slug}.html"
         out.write_text(build_doc(src, slug))
         print(f"wrote {out.relative_to(WEB_DIR)}")
+
+    out = DOCS_DIR / "index.html"
+    out.write_text(build_docs_index())
+    print(f"wrote {out.relative_to(WEB_DIR)}")
+
+    out = WEB_DIR / "404.html"
+    out.write_text(build_404())
+    print(f"wrote {out.relative_to(WEB_DIR)}")
 
     out = WEB_DIR / "index.html"
     out.write_text(build_index())

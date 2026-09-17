@@ -7,8 +7,11 @@
  *   - a record that NEEDS A FIX  (poor people's tv room: wrong date, missing co-author)
  *   - a FALSE POSITIVE to reject (Grief and Grievance — that's Okwui *Enwezor*)
  *
- * No third-party images are embedded: performance works have no canonical image, so
- * they render typographically. Rights-clean by design.
+ * Rights-clean by design: a work shows an artist-GRANTED image clip (from the
+ * artists' own sweatvariant.com, with a visible photo credit) when present;
+ * works without granted media render typographically. Nothing is scraped —
+ * every image is the artists' own, attributed. Grief and Grievance stays
+ * typographic on purpose: it's Okwui Enwezor's exhibition, not Okpokwasili's.
  *
  * Inlined (not fetched) so the app opens over file:// with no server.
  */

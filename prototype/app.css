@@ -212,3 +212,14 @@ main { padding: 34px 0 70px; min-height: 60vh; }
 
 .toast { position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%); background: var(--ink); color: var(--bg); padding: 10px 18px; border-radius: 8px; font-size: 14px; opacity: 0; transition: opacity .25s, transform .25s; pointer-events: none; z-index: 50; }
 .toast.show { opacity: 1; transform: translateX(-50%) translateY(-4px); }
+
+/* Deep-link landing highlight (#/review/<work-id>, #/catalogue/<work-id>) —
+   a brief ring so an arriving reader sees which record the link meant. */
+.deep-target { animation: deep-ring 2.6s ease-out 1; border-radius: var(--radius); }
+@keyframes deep-ring {
+  0%, 55% { box-shadow: 0 0 0 3px var(--accent); }
+  100%    { box-shadow: 0 0 0 3px transparent; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .deep-target { animation: none; box-shadow: 0 0 0 3px var(--accent); }
+}

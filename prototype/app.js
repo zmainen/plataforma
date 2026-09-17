@@ -157,6 +157,20 @@
     main.appendChild(fn(r.arg));
     window.scrollTo(0, keepY);
     _lastView = r.name;
+    if (r.arg) focusRecord(r.arg);
+  }
+
+  /* Deep link: #/review/w-bronx-gothic or #/catalogue/w-bronx-gothic lands on the
+     record itself. Written for the data-model doc, which links a schema layer to
+     the live record it describes; any external write-up can point the same way. */
+  function focusRecord(id) {
+    var card = document.getElementById("card-" + id);
+    if (!card) return;
+    setTimeout(function () {
+      card.scrollIntoView({ behavior: "smooth", block: "center" });
+      card.classList.add("deep-target");
+      setTimeout(function () { card.classList.remove("deep-target"); }, 2600);
+    }, 60);
   }
   window.addEventListener("hashchange", render);
 
@@ -482,7 +496,7 @@
     works.forEach(function (w) {
       var g = glyphFor(w);
       var on = isPublished(w.id);
-      var item = el('<div class="cat-item"></div>');
+      var item = el('<div class="cat-item" id="card-' + esc(w.id) + '"></div>');
       var row = el(
         '<div class="cat-row">' +
           cardVisual(w, g) +
