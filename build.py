@@ -493,6 +493,7 @@ def build_index() -> str:
   </div>
   <div class="footer-bottom">
     <span>&copy; 2026 Plataforma</span>
+    <span>Photographs &copy; Zachary F. Mainen</span>
     <span>K. Dixon &middot; O. Okpokwasili &middot; Z. Mainen</span>
   </div>
 </footer>
