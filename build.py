@@ -288,6 +288,7 @@ def render_doc_page(title: str, body_html: str, current_slug: str,
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="{html_module.escape(description)}">
+<meta name="robots" content="noindex, nofollow">
 <title>{html_module.escape(full_title)}</title>
 <link rel="stylesheet" href="../style.css">
 </head>
@@ -345,6 +346,7 @@ def build_404() -> str:
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="Page not found — Plataforma.">
+<meta name="robots" content="noindex, nofollow">
 <title>Not found — Plataforma</title>
 <link rel="stylesheet" href="/style.css">
 <style>
@@ -398,6 +400,7 @@ def build_index() -> str:
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="A cooperative directory for creative work.">
+<meta name="robots" content="noindex, nofollow">
 <title>Plataforma</title>
 <link rel="stylesheet" href="style.css">
 </head>
@@ -555,6 +558,12 @@ def main() -> int:
 
     out = WEB_DIR / "index.html"
     out.write_text(build_index())
+    print(f"wrote {out.relative_to(WEB_DIR)}")
+
+    # Not for search engines while the site is pre-announcement. Remove this
+    # (and the noindex metas) when the project goes public.
+    out = WEB_DIR / "robots.txt"
+    out.write_text("User-agent: *\nDisallow: /\n")
     print(f"wrote {out.relative_to(WEB_DIR)}")
     return 0
 
